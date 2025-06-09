@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Agency Lookup Tool</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select, button { margin: 10px 0; padding: 10px; width: 100%; }
+    .output { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Federal Agency Lookup</h1>
+  <label for="agency">Choose an agency:</label>
+  <select id="agency"></select>
+  <label for="location">Location:</label>
+  <select id="location">
+    <option value="dc">DC Headquarters</option>
+    <option value="local">Local Field Office</option>
+  </select>
+  <button onclick="lookup()">Lookup</button>
+  <div class="output" id="output"></div>
+  <script src="data.js"></script>
+  <script>
+    const agencyDropdown = document.getElementById('agency');
+    data.forEach((agency, index) => {
+      let option = document.createElement('option');
+      option.value = index;
+      option.textContent = agency.name;
+      agencyDropdown.appendChild(option);
+    });
+
+    function lookup() {
+      const agency = data[agencyDropdown.value];
+      const loc = document.getElementById('location').value;
+      const output = document.getElementById('output');
+      if (loc === 'dc') {
+        output.innerHTML = '<strong>Address:</strong> ' + agency.dc_address + '<br><strong>Website:</strong> <a href="' + agency.website + '" target="_blank">' + agency.website + '</a>';
+      } else {
+        output.innerHTML = '<strong>Local Offices:</strong><br>' + agency.local_offices.map(o => `<strong>${o.region}</strong>: ${o.address}`).join('<br>');
+      }
+    }
+  </script>
+</body>
+</html>
